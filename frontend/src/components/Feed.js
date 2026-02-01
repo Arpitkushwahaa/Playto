@@ -8,15 +8,19 @@ const Feed = () => {
   const [error, setError] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newPostContent, setNewPostContent] = useState('');
-  const [username, setUsername] = useState('Guest');
+  const [username, setUsername] = useState('');
+  const [showUsernamePrompt, setShowUsernamePrompt] = useState(false);
   const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     loadPosts();
-    // Set random username for demo
-    const randomUser = `User${Math.floor(Math.random() * 1000)}`;
-    setUsername(localStorage.getItem('username') || randomUser);
-    localStorage.setItem('username', randomUser);
+    // Check if username exists in localStorage
+    const savedUsername = localStorage.getItem('playto_username');
+    if (savedUsername) {
+      setUsername(savedUsername);
+    } else {
+      setShowUsernamePrompt(true);
+    }
   }, []);
 
   const loadPosts = async () => {
@@ -36,15 +40,23 @@ const Feed = () => {
 
     setCreating(true);
     try {
-      await feedAPI.createPost(newPostContent);
+      await feedAPI.createPost(newPostContent, username);
       setNewPostContent('');
       setShowCreateForm(false);
       loadPosts();
     } catch (err) {
       console.error('Error creating post:', err);
-      alert('Failed to create post. Please make sure you are logged in.');
+      alert('Failed to create post.');
     } finally {
       setCreating(false);
+    }
+  };
+
+  const handleUsernameSubmit = (e) => {
+    e.preventDefault();
+    if (username.trim()) {
+      localStorage.setItem('playto_username', username);
+      setShowUsernamePrompt(false);
     }
   };
 
@@ -87,13 +99,52 @@ const Feed = () => {
 
   return (
     <div>
+      {/* Username Prompt Modal */}
+      {showUsernamePrompt && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Welcome! 👋</h2>
+            <p className="text-gray-600 mb-6">Please enter your name to get started:</p>
+            <form onSubmit={handleUsernameSubmit}>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter your name..."
+                className="w-full p-4 border-2 border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-4"
+                autoFocus
+                required
+              />
+              <button
+                type="submit"
+                className="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-sky-400 text-white rounded-lg hover:from-blue-600 hover:to-sky-500 transition-all duration-200 font-semibold shadow-md hover:shadow-lg"
+              >
+                Continue
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Create Post Section */}
       <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-6 mb-6 border border-gray-100">
         <div className="flex items-center space-x-3 mb-4">
           <div className="w-10 h-10 bg-gradient-to-br from-sky-400 to-sky-400 rounded-full flex items-center justify-center text-white font-bold">
             {username.charAt(0).toUpperCase()}
           </div>
-          <span className="font-semibold text-gray-700">{username}</span>
+          <div className="flex-1">
+            <span className="font-semibold text-gray-700">{username}</span>
+            <button
+              onClick={() => {
+                localStorage.removeItem('playto_username');
+                setUsername('');
+                setShowUsernamePrompt(true);
+              }}
+              className="ml-3 text-xs text-blue-500 hover:text-blue-600"
+            >
+              Change Name
+            </button>
+          </div>
         </div>
         {!showCreateForm ? (
           <button

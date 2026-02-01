@@ -32,7 +32,8 @@ const Post = ({ post: initialPost, onUpdate }) => {
     if (!commentContent.trim()) return;
 
     try {
-      await feedAPI.createComment(post.id, commentContent);
+      const username = localStorage.getItem('playto_username') || 'Guest';
+      await feedAPI.createComment(post.id, commentContent, null, username);
       setCommentContent('');
       setShowCommentForm(false);
       // Refresh the post to get updated comments
@@ -61,7 +62,8 @@ const Post = ({ post: initialPost, onUpdate }) => {
 
   const handleReply = async (parentId, content) => {
     try {
-      await feedAPI.createComment(post.id, content, parentId);
+      const username = localStorage.getItem('playto_username') || 'Guest';
+      await feedAPI.createComment(post.id, content, parentId, username);
       // Refresh the post to get updated comments
       const response = await feedAPI.getPost(post.id);
       setPost(response.data);

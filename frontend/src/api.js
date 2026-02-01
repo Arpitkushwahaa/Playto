@@ -13,14 +13,14 @@ export const feedAPI = {
   // Posts
   getPosts: () => api.get('/posts/'),
   getPost: (id) => api.get(`/posts/${id}/`),
-  createPost: (content) => api.post('/posts/', { content }),
+  createPost: (content, username) => api.post('/posts/', { content, username }),
   likePost: (id) => api.post(`/posts/${id}/like/`),
   unlikePost: (id) => api.post(`/posts/${id}/unlike/`),
   
   // Comments
   getComments: (postId) => api.get(`/comments/?post_id=${postId}`),
-  createComment: (postId, content, parentId = null) => 
-    api.post('/comments/', { post: postId, content, parent: parentId }),
+  createComment: (postId, content, parentId = null, username = null) => 
+    api.post('/comments/', { post: postId, content, parent: parentId, username }),
   likeComment: (id) => api.post(`/comments/${id}/like/`),
   unlikeComment: (id) => api.post(`/comments/${id}/unlike/`),
   

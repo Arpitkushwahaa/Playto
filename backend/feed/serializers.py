@@ -48,15 +48,19 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class CommentCreateSerializer(serializers.ModelSerializer):
     """Serializer for creating comments."""
+    username = serializers.CharField(write_only=True, required=False)
     
     class Meta:
         model = Comment
-        fields = ['post', 'parent', 'content']
+        fields = ['post', 'parent', 'content', 'username']
     
     def create(self, validated_data):
-        # Generate a random username for demo purposes
-        import random
-        username = f"User{random.randint(1, 9999)}"
+        # Get username from validated data or generate random
+        username = validated_data.pop('username', None)
+        if not username:
+            import random
+            username = f"User{random.randint(1, 9999)}"
+        
         user, _ = User.objects.get_or_create(
             username=username,
             defaults={'email': f'{username}@example.com'}
@@ -100,15 +104,19 @@ class PostSerializer(serializers.ModelSerializer):
 
 class PostCreateSerializer(serializers.ModelSerializer):
     """Serializer for creating posts."""
+    username = serializers.CharField(write_only=True, required=False)
     
     class Meta:
         model = Post
-        fields = ['content']
+        fields = ['content', 'username']
     
     def create(self, validated_data):
-        # Generate a random username for demo purposes
-        import random
-        username = f"User{random.randint(1, 9999)}"
+        # Get username from validated data or generate random
+        username = validated_data.pop('username', None)
+        if not username:
+            import random
+            username = f"User{random.randint(1, 9999)}"
+        
         user, _ = User.objects.get_or_create(
             username=username,
             defaults={'email': f'{username}@example.com'}
