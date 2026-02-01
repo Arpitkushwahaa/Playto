@@ -90,7 +90,7 @@ const Feed = () => {
       {/* Create Post Section */}
       <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-6 mb-6 border border-gray-100">
         <div className="flex items-center space-x-3 mb-4">
-          <div className="w-10 h-10 bg-gradient-to-br from-sky-500 to-sky-500 rounded-full flex items-center justify-center text-white font-bold">
+          <div className="w-10 h-10 bg-gradient-to-br from-sky-300 to-sky-300 rounded-full flex items-center justify-center text-white font-bold">
             {username.charAt(0).toUpperCase()}
           </div>
           <span className="font-semibold text-gray-700">{username}</span>
@@ -108,7 +108,7 @@ const Feed = () => {
               value={newPostContent}
               onChange={(e) => setNewPostContent(e.target.value)}
               placeholder="Share something interesting..."
-              className="w-full p-4 border-2 border-blue-200 rounded-xl focus:ring-2 focus:ring-sky-500 focus:border-transparent resize-none transition-all duration-200"
+              className="w-full p-4 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-sky-300 focus:border-transparent resize-none transition-all duration-200"
               rows="4"
               autoFocus
             />
@@ -130,7 +130,7 @@ const Feed = () => {
                 <button
                   type="submit"
                   disabled={creating || !newPostContent.trim()}
-                  className="px-8 py-2.5 bg-gradient-to-r from-blue-600 to-blue-600 text-white rounded-lg hover:from-blue-700 hover:to-blue-700 transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-8 py-2.5 bg-gradient-to-r from-blue-400 to-blue-400 text-white rounded-lg hover:from-blue-500 hover:to-blue-500 transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {creating ? (
                     <span className="flex items-center">
