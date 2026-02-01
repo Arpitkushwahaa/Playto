@@ -5,9 +5,9 @@ import './index.css';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-sky-50">
       {/* Header */}
-      <header className="bg-gradient-to-r from-purple-600 to-pink-600 shadow-lg sticky top-0 z-10 border-b-4 border-purple-700">
+      <header className="bg-gradient-to-r from-blue-600 to-sky-500 shadow-lg sticky top-0 z-10 border-b-4 border-blue-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -18,18 +18,18 @@ function App() {
                 <h1 className="text-3xl font-extrabold text-white drop-shadow-md">
                   Community Feed
                 </h1>
-                <p className="text-purple-100 text-sm">Share, discuss, and connect</p>
+                <p className="text-blue-100 text-sm">Share, discuss, and connect</p>
               </div>
             </div>
             <div className="hidden sm:flex items-center space-x-6 bg-white/10 backdrop-blur-sm rounded-xl px-6 py-3 border border-white/20">
               <div className="text-center">
                 <div className="text-white font-bold text-lg">+5</div>
-                <div className="text-purple-100 text-xs">Post Like</div>
+                <div className="text-blue-100 text-xs">Post Like</div>
               </div>
               <div className="h-8 w-px bg-white/30"></div>
               <div className="text-center">
                 <div className="text-white font-bold text-lg">+1</div>
-                <div className="text-purple-100 text-xs">Comment Like</div>
+                <div className="text-blue-100 text-xs">Comment Like</div>
               </div>
             </div>
           </div>
@@ -52,17 +52,17 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-purple-600 to-pink-600 border-t-4 border-purple-700 mt-16">
+      <footer className="bg-gradient-to-r from-blue-600 to-sky-500 border-t-4 border-blue-700 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-2 mb-3">
               <span className="text-2xl">⚡</span>
               <p className="text-white font-semibold">Playto Community Challenge</p>
             </div>
-            <p className="text-purple-100 text-sm mb-2">
+            <p className="text-blue-100 text-sm mb-2">
               Built with Django REST Framework, React, and Tailwind CSS
             </p>
-            <div className="flex items-center justify-center space-x-4 text-xs text-purple-200">
+            <div className="flex items-center justify-center space-x-4 text-xs text-blue-200">
               <span>✓ Threaded Comments</span>
               <span>•</span>
               <span>✓ Real-time Leaderboard</span>

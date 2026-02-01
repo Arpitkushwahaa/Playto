@@ -42,15 +42,15 @@ const Comment = ({ comment, onLike, onReply, depth = 0 }) => {
   };
 
   const maxDepth = 5;
-  const indentClass = depth > 0 ? 'ml-6 pl-4 border-l-4 border-purple-200 hover:border-purple-400 transition-colors' : '';
+  const indentClass = depth > 0 ? 'ml-6 pl-4 border-l-4 border-blue-200 hover:border-blue-400 transition-colors' : '';
 
   return (
     <div className={`${indentClass} mb-4`}>
-      <div className="bg-gradient-to-br from-white to-purple-50 rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-200 border border-purple-100">
+      <div className="bg-gradient-to-br from-white to-blue-50 rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-200 border border-blue-100">
         {/* Comment Header */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
-            <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold shadow-sm">
+            <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-sky-500 rounded-full flex items-center justify-center text-white font-bold shadow-sm">
               {comment.author.username.charAt(0).toUpperCase()}
             </div>
             <div>
@@ -64,7 +64,7 @@ const Comment = ({ comment, onLike, onReply, depth = 0 }) => {
             </div>
           </div>
           {depth > 0 && (
-            <span className="text-xs text-purple-600 bg-purple-100 px-2 py-1 rounded-full font-semibold">
+            <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full font-semibold">
               Level {depth}
             </span>
           )}
@@ -102,7 +102,7 @@ const Comment = ({ comment, onLike, onReply, depth = 0 }) => {
           {depth < maxDepth && (
             <button
               onClick={() => setShowReplyForm(!showReplyForm)}
-              className="text-gray-600 bg-gray-100 hover:bg-purple-50 hover:text-purple-600 transition-all duration-200 flex items-center space-x-1 px-3 py-1.5 rounded-lg font-medium"
+              className="text-gray-600 bg-gray-100 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 flex items-center space-x-1 px-3 py-1.5 rounded-lg font-medium"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -143,7 +143,7 @@ const Comment = ({ comment, onLike, onReply, depth = 0 }) => {
                 <button
                   type="submit"
                   disabled={!replyContent.trim()}
-                  className="px-5 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-5 py-2 bg-gradient-to-r from-blue-600 to-blue-600 text-white rounded-lg hover:from-blue-700 hover:to-blue-700 transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   ↩️ Reply
                 </button>
