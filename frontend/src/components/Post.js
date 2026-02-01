@@ -200,9 +200,7 @@ const Post = ({ post: initialPost, onUpdate }) => {
               >
                 💬 Comment
               </button>
-            </div
-              Cancel
-            </button>
+            </div>
           </div>
         </form>
       )}
