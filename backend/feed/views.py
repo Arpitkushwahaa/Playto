@@ -1,11 +1,13 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
 from django.db.models import Q, Count, Sum, Case, When, IntegerField, F, Prefetch
 from django.db import IntegrityError, transaction
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from datetime import timedelta
 from .models import Post, Comment, Like
 from .serializers import (
@@ -15,12 +17,13 @@ from .serializers import (
 )
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class PostViewSet(viewsets.ModelViewSet):
     """
     ViewSet for managing posts.
     """
     queryset = Post.objects.all()
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowAny]
     
     def get_serializer_class(self):
         if self.action == 'create':
@@ -38,7 +41,7 @@ class PostViewSet(viewsets.ModelViewSet):
             )
         ).order_by('-created_at')
     
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=['post'], permission_classes=[AllowAny])
     def like(self, request, pk=None):
         """
         Like a post. Handles race conditions with database constraints.
@@ -77,7 +80,7 @@ class PostViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=['post'], permission_classes=[AllowAny])
     def unlike(self, request, pk=None):
         """
         Unlike a post.
@@ -107,12 +110,13 @@ class PostViewSet(viewsets.ModelViewSet):
             )
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class CommentViewSet(viewsets.ModelViewSet):
     """
     ViewSet for managing comments.
     """
     queryset = Comment.objects.all()
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowAny]
     
     def get_serializer_class(self):
         if self.action == 'create':
@@ -132,7 +136,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         
         return queryset.order_by('-created_at')
     
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=['post'], permission_classes=[AllowAny])
     def like(self, request, pk=None):
         """
         Like a comment. Handles race conditions with database constraints.
@@ -169,7 +173,7 @@ class CommentViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
     
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=['post'], permission_classes=[AllowAny])
     def unlike(self, request, pk=None):
         """
         Unlike a comment.
@@ -277,7 +281,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     
-    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+    @action(detail=False, methods=['get'], permission_classes=[AllowAny])
     def me(self, request):
         """Get the current user's information."""
         serializer = self.get_serializer(request.user)
