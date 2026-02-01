@@ -85,11 +85,11 @@ const Post = ({ post: initialPost, onUpdate }) => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-6 mb-6 hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-100">
+    <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-6 mb-6 hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-200">
       {/* Post Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-3">
-          <div className="w-14 h-14 bg-gradient-to-br from-blue-400 to-sky-300 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md">
+          <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-sky-400 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md">
             {post.author.username.charAt(0).toUpperCase()}
           </div>
           <div>
@@ -139,7 +139,7 @@ const Post = ({ post: initialPost, onUpdate }) => {
 
         <button
           onClick={() => setShowCommentForm(!showCommentForm)}
-          className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-400 transition-all duration-200 font-semibold"
+          className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-500 transition-all duration-200 font-semibold"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -155,7 +155,7 @@ const Post = ({ post: initialPost, onUpdate }) => {
         {post.comments && post.comments.length > 0 && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-400 transition-all duration-200 font-semibold"
+            className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-blue-50 hover:text-blue-500 transition-all duration-200 font-semibold"
           >
             <svg
               className={`w-5 h-5 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
@@ -172,12 +172,12 @@ const Post = ({ post: initialPost, onUpdate }) => {
 
       {/* Comment Form */}
       {showCommentForm && (
-        <form onSubmit={handleComment} className="mb-4 bg-blue-50 rounded-lg p-4 border border-blue-100">
+        <form onSubmit={handleComment} className="mb-4 bg-blue-50 rounded-lg p-4 border border-blue-200">
           <textarea
             value={commentContent}
             onChange={(e) => setCommentContent(e.target.value)}
             placeholder="💬 Write a thoughtful comment..."
-            className="w-full p-4 border-2 border-blue-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full p-4 border-2 border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
             rows="3"
           />
           <div className="flex justify-between items-center mt-3">
@@ -196,7 +196,7 @@ const Post = ({ post: initialPost, onUpdate }) => {
               <button
                 type="submit"
                 disabled={!commentContent.trim()}
-                className="px-6 py-2 bg-gradient-to-r from-blue-400 to-sky-300 text-white rounded-lg hover:from-blue-500 hover:to-sky-600 transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 bg-gradient-to-r from-blue-500 to-sky-400 text-white rounded-lg hover:from-blue-500 hover:to-sky-600 transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 💬 Comment
               </button>

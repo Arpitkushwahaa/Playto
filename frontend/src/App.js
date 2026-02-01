@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-cyan-50">
       {/* Header */}
-      <header className="bg-gradient-to-r from-blue-400 to-sky-300 shadow-lg sticky top-0 z-10 border-b-4 border-blue-400">
+      <header className="bg-gradient-to-r from-blue-500 to-sky-400 shadow-lg sticky top-0 z-10 border-b-4 border-blue-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -52,7 +52,7 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-blue-400 to-sky-300 border-t-4 border-blue-400 mt-16">
+      <footer className="bg-gradient-to-r from-blue-500 to-sky-400 border-t-4 border-blue-500 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-2 mb-3">

@@ -56,7 +56,7 @@ const Leaderboard = () => {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-900 flex items-center">
           <span className="mr-2 text-3xl">🏆</span> 
-          <span className="bg-gradient-to-r from-blue-400 to-blue-400 bg-clip-text text-transparent">Top Contributors</span>
+          <span className="bg-gradient-to-r from-blue-500 to-blue-500 bg-clip-text text-transparent">Top Contributors</span>
         </h2>
         <span className="text-xs bg-blue-100 text-blue-500 px-3 py-1 rounded-full font-semibold">24h</span>
       </div>
@@ -78,7 +78,7 @@ const Leaderboard = () => {
                   ? 'bg-gradient-to-r from-gray-100 via-gray-50 to-slate-100 border-2 border-gray-400 shadow-md'
                   : index === 2
                   ? 'bg-gradient-to-r from-orange-100 via-orange-50 to-amber-100 border-2 border-orange-400 shadow-md'
-                  : 'bg-white border-2 border-gray-200 hover:border-blue-200'
+                  : 'bg-white border-2 border-gray-200 hover:border-blue-300'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -91,10 +91,10 @@ const Leaderboard = () => {
                       {user.username}
                     </p>
                     <div className="flex items-center space-x-1">
-                      <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                       </svg>
-                      <span className={`font-bold ${index < 3 ? 'text-blue-500 text-base' : 'text-blue-400 text-sm'}`}>
+                      <span className={`font-bold ${index < 3 ? 'text-blue-500 text-base' : 'text-blue-500 text-sm'}`}>
                         {user.karma} karma
                       </span>
                     </div>
@@ -111,7 +111,7 @@ const Leaderboard = () => {
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd"></path>
                     </svg>
-                    <span className="font-semibold text-blue-400">{user.comment_karma}</span> comments
+                    <span className="font-semibold text-blue-500">{user.comment_karma}</span> comments
                   </div>
                 </div>
               </div>
@@ -120,7 +120,7 @@ const Leaderboard = () => {
         </div>
       )}
       
-      <div className="mt-6 pt-4 border-t border-blue-200">
+      <div className="mt-6 pt-4 border-t border-blue-300">
         <p className="text-xs text-gray-500 text-center">
           🔄 Auto-updates every 30 seconds
         </p>
