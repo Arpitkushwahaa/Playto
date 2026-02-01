@@ -52,7 +52,7 @@ class PostViewSet(viewsets.ModelViewSet):
             # Use atomic transaction to ensure consistency
             with transaction.atomic():
                 like, created = Like.objects.get_or_create(
-                    user=request.user,
+                    user=User.objects.get_or_create(username="demo_user", defaults={"email": "demo@example.com"})[0],
                     post=post
                 )
                 
@@ -89,7 +89,7 @@ class PostViewSet(viewsets.ModelViewSet):
         
         try:
             with transaction.atomic():
-                like = Like.objects.get(user=request.user, post=post)
+                like = Like.objects.get(user=User.objects.get_or_create(username="demo_user", defaults={"email": "demo@example.com"})[0], post=post)
                 like.delete()
                 
                 # Refresh post to get updated like_count
@@ -146,7 +146,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         try:
             with transaction.atomic():
                 like, created = Like.objects.get_or_create(
-                    user=request.user,
+                    user=User.objects.get_or_create(username="demo_user", defaults={"email": "demo@example.com"})[0],
                     comment=comment
                 )
                 
@@ -182,7 +182,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         
         try:
             with transaction.atomic():
-                like = Like.objects.get(user=request.user, comment=comment)
+                like = Like.objects.get(user=User.objects.get_or_create(username="demo_user", defaults={"email": "demo@example.com"})[0], comment=comment)
                 like.delete()
                 
                 # Refresh comment to get updated like_count

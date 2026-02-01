@@ -54,7 +54,12 @@ class CommentCreateSerializer(serializers.ModelSerializer):
         fields = ['post', 'parent', 'content']
     
     def create(self, validated_data):
-        validated_data['author'] = self.context['request'].user
+        # Get or create a default user for demo purposes
+        user, _ = User.objects.get_or_create(
+            username='demo_user',
+            defaults={'email': 'demo@example.com'}
+        )
+        validated_data['author'] = user
         return super().create(validated_data)
 
 
@@ -99,7 +104,12 @@ class PostCreateSerializer(serializers.ModelSerializer):
         fields = ['content']
     
     def create(self, validated_data):
-        validated_data['author'] = self.context['request'].user
+        # Get or create a default user for demo purposes
+        user, _ = User.objects.get_or_create(
+            username='demo_user',
+            defaults={'email': 'demo@example.com'}
+        )
+        validated_data['author'] = user
         return super().create(validated_data)
 
 
