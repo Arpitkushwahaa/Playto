@@ -5,22 +5,32 @@ import './index.css';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-pink-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <header className="bg-gradient-to-r from-purple-600 to-pink-600 shadow-lg sticky top-0 z-10 border-b-4 border-purple-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent">
-              Community Feed
-            </h1>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
-                <span className="font-semibold">Post Like:</span> 5 karma
-              </span>
-              <span className="text-sm text-gray-400">|</span>
-              <span className="text-sm text-gray-600">
-                <span className="font-semibold">Comment Like:</span> 1 karma
-              </span>
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-md">
+                <span className="text-3xl">💬</span>
+              </div>
+              <div>
+                <h1 className="text-3xl font-extrabold text-white drop-shadow-md">
+                  Community Feed
+                </h1>
+                <p className="text-purple-100 text-sm">Share, discuss, and connect</p>
+              </div>
+            </div>
+            <div className="hidden sm:flex items-center space-x-6 bg-white/10 backdrop-blur-sm rounded-xl px-6 py-3 border border-white/20">
+              <div className="text-center">
+                <div className="text-white font-bold text-lg">+5</div>
+                <div className="text-purple-100 text-xs">Post Like</div>
+              </div>
+              <div className="h-8 w-px bg-white/30"></div>
+              <div className="text-center">
+                <div className="text-white font-bold text-lg">+1</div>
+                <div className="text-purple-100 text-xs">Comment Like</div>
+              </div>
             </div>
           </div>
         </div>
@@ -42,11 +52,24 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <p className="text-center text-gray-500 text-sm">
-            Built with Django, DRF, React, and Tailwind CSS
-          </p>
+      <footer className="bg-gradient-to-r from-purple-600 to-pink-600 border-t-4 border-purple-700 mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-2 mb-3">
+              <span className="text-2xl">⚡</span>
+              <p className="text-white font-semibold">Playto Community Challenge</p>
+            </div>
+            <p className="text-purple-100 text-sm mb-2">
+              Built with Django REST Framework, React, and Tailwind CSS
+            </p>
+            <div className="flex items-center justify-center space-x-4 text-xs text-purple-200">
+              <span>✓ Threaded Comments</span>
+              <span>•</span>
+              <span>✓ Real-time Leaderboard</span>
+              <span>•</span>
+              <span>✓ Optimized Queries</span>
+            </div>
+          </div>
         </div>
       </footer>
     </div>

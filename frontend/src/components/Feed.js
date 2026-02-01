@@ -8,9 +8,15 @@ const Feed = () => {
   const [error, setError] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newPostContent, setNewPostContent] = useState('');
+  const [username, setUsername] = useState('Guest');
+  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     loadPosts();
+    // Set random username for demo
+    const randomUser = `User${Math.floor(Math.random() * 1000)}`;
+    setUsername(localStorage.getItem('username') || randomUser);
+    localStorage.setItem('username', randomUser);
   }, []);
 
   const loadPosts = async () => {
@@ -28,6 +34,7 @@ const Feed = () => {
     e.preventDefault();
     if (!newPostContent.trim()) return;
 
+    setCreating(true);
     try {
       await feedAPI.createPost(newPostContent);
       setNewPostContent('');
@@ -36,6 +43,8 @@ const Feed = () => {
     } catch (err) {
       console.error('Error creating post:', err);
       alert('Failed to create post. Please make sure you are logged in.');
+    } finally {
+      setCreating(false);
     }
   };
 
@@ -79,41 +88,63 @@ const Feed = () => {
   return (
     <div>
       {/* Create Post Section */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-6 mb-6 border border-gray-100">
+        <div className="flex items-center space-x-3 mb-4">
+          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
+            {username.charAt(0).toUpperCase()}
+          </div>
+          <span className="font-semibold text-gray-700">{username}</span>
+        </div>
         {!showCreateForm ? (
           <button
             onClick={() => setShowCreateForm(true)}
-            className="w-full text-left px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-gray-500"
+            className="w-full text-left px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 rounded-xl transition-all duration-200 text-gray-600 border border-gray-200 hover:border-gray-300 hover:shadow-md"
           >
-            What's on your mind?
+            💭 What's on your mind? Share with the community...
           </button>
         ) : (
           <form onSubmit={handleCreatePost}>
             <textarea
               value={newPostContent}
               onChange={(e) => setNewPostContent(e.target.value)}
-              placeholder="What's on your mind?"
-              className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+              placeholder="Share something interesting..."
+              className="w-full p-4 border-2 border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none transition-all duration-200"
               rows="4"
               autoFocus
             />
-            <div className="flex space-x-2 mt-3">
-              <button
-                type="submit"
-                className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-semibold"
-              >
-                Post
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setShowCreateForm(false);
-                  setNewPostContent('');
-                }}
-                className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-semibold"
-              >
-                Cancel
-              </button>
+            <div className="flex items-center justify-between mt-4">
+              <div className="text-sm text-gray-500">
+                {newPostContent.length}/500 characters
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowCreateForm(false);
+                    setNewPostContent('');
+                  }}
+                  className="px-6 py-2.5 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200 font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={creating || !newPostContent.trim()}
+                  className="px-8 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-semibold shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {creating ? (
+                    <span className="flex items-center">
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Posting...
+                    </span>
+                  ) : (
+                    '✨ Publish Post'
+                  )}
+                </button>
+              </div>
             </div>
           </form>
         )}
