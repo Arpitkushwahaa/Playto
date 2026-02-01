@@ -9,9 +9,6 @@ const api = axios.create({
   },
 });
 
-// Mock user for demo purposes (in production, use real authentication)
-const MOCK_USER_ID = 1;
-
 export const feedAPI = {
   // Posts
   getPosts: () => api.get('/posts/'),
