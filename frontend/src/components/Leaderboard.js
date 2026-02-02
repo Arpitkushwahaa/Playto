@@ -106,13 +106,13 @@ const Leaderboard = () => {
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z" clipRule="evenodd"></path>
                     </svg>
-                    <span className="font-semibold text-green-600">{user.post_count}</span> posts
+                    <span className="font-semibold text-green-600">{user.post_count}</span> posts created
                   </div>
                   <div className="flex items-center space-x-1 text-xs text-gray-600">
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd"></path>
                     </svg>
-                    <span className="font-semibold text-blue-500">{user.comment_count}</span> comments
+                    <span className="font-semibold text-blue-500">{user.comment_count}</span> comments posted
                   </div>
                 </div>
               </div>
