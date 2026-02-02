@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Feed from './components/Feed';
 import Leaderboard from './components/Leaderboard';
 import './index.css';
@@ -8,6 +8,23 @@ function App() {
 
   const handlePostCreated = useCallback(() => {
     setRefreshLeaderboard(prev => prev + 1);
+  }, []);
+
+  // Keep backend alive by pinging health endpoint every 10 minutes
+  useEffect(() => {
+    const keepAlive = () => {
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+      const baseUrl = apiUrl.replace('/api', '');
+      fetch(`${baseUrl}/health/`).catch(() => {});
+    };
+
+    // Initial ping
+    keepAlive();
+
+    // Ping every 10 minutes (600000ms)
+    const interval = setInterval(keepAlive, 600000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
