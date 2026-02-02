@@ -18,6 +18,7 @@ const Leaderboard = () => {
       const response = await feedAPI.getLeaderboard();
       setLeaderboard(response.data);
       setLoading(false);
+      setError(null);
     } catch (err) {
       setError('Failed to load leaderboard');
       setLoading(false);

@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import Feed from './components/Feed';
 import Leaderboard from './components/Leaderboard';
 import './index.css';
 
 function App() {
+  const [refreshLeaderboard, setRefreshLeaderboard] = useState(0);
+
+  const handlePostCreated = useCallback(() => {
+    setRefreshLeaderboard(prev => prev + 1);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-cyan-50">
       {/* Header */}
-      <header className="bg-gradient-to-r from-blue-500 to-sky-400 shadow-lg sticky top-0 z-10 border-b-4 border-blue-500">
+      <header className="bg-gradient-to-r from-blue-500 to-sky-400 shadow-lg sticky top-0 z-10 border-b-4 border-blue-500">`
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -41,12 +47,12 @@ function App() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Feed Section */}
           <div className="lg:col-span-2">
-            <Feed />
+            <Feed onPostCreated={handlePostCreated} />
           </div>
 
           {/* Leaderboard Section */}
           <div className="lg:col-span-1">
-            <Leaderboard />
+            <Leaderboard key={refreshLeaderboard} />
           </div>
         </div>
       </main>
