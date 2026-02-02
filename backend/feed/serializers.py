@@ -152,5 +152,5 @@ class LeaderboardSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     username = serializers.CharField()
     karma = serializers.IntegerField()
-    post_karma = serializers.IntegerField()
-    comment_karma = serializers.IntegerField()
+    post_count = serializers.IntegerField()
+    comment_count = serializers.IntegerField()

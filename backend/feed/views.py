@@ -250,6 +250,18 @@ class LeaderboardViewSet(viewsets.ViewSet):
                     default=0,
                     output_field=IntegerField()
                 )
+            ),
+            # Count actual posts created in last 24h
+            post_count=Count(
+                'posts',
+                filter=Q(posts__created_at__gte=twenty_four_hours_ago),
+                distinct=True
+            ),
+            # Count actual comments created in last 24h
+            comment_count=Count(
+                'comments',
+                filter=Q(comments__created_at__gte=twenty_four_hours_ago),
+                distinct=True
             )
         ).annotate(
             # Total karma is sum of post_karma and comment_karma
@@ -264,8 +276,8 @@ class LeaderboardViewSet(viewsets.ViewSet):
                 'user_id': user.id,
                 'username': user.username,
                 'karma': user.karma or 0,
-                'post_karma': user.post_karma or 0,
-                'comment_karma': user.comment_karma or 0,
+                'post_count': user.post_count or 0,
+                'comment_count': user.comment_count or 0,
             }
             for user in leaderboard_data
         ]
