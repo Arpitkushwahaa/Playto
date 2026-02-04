@@ -33,27 +33,35 @@ A full-stack community feed application with threaded discussions and a dynamic 
 
 ## 🚀 Quick Start
 
-### Live Demo
+### 🌐 Live Demo
 
 - **Frontend:** https://playto-kappa.vercel.app
 - **Backend API:** https://playto-ohyu.onrender.com/api
+- **GitHub Repository:** https://github.com/Arpitkushwahaa/Playto
 
-### Using Docker (Recommended)
+### 🐳 Using Docker (Recommended)
 
 ```bash
+# Clone the repository
+git clone https://github.com/Arpitkushwahaa/Playto.git
+cd Playto
+
+# Start all services (PostgreSQL + Django + React)
 docker-compose up --build
 ```
 
-Then open:
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000/api
-- Admin: http://localhost:8000/admin
+**Access the application:**
+- **Frontend:** http://localhost:3000
+- **Backend API:** http://localhost:8000/api
+- **Admin Panel:** http://localhost:8000/admin
 
-### Manual Setup
+**Note:** First startup may take 2-3 minutes to build images and run migrations.
 
-**Prerequisites**: Python 3.9+, Node.js 16+
+### 💻 Manual Setup
 
-#### Backend
+**Prerequisites:** Python 3.11+, Node.js 18+, PostgreSQL (optional)
+
+#### Backend Setup
 
 ```bash
 cd backend
@@ -67,12 +75,11 @@ source venv/bin/activate
 
 pip install -r requirements.txt
 python manage.py migrate
-python manage.py createsuperuser
-python manage.py shell < seed_data.py
+python manage.py createsuperuser  # Optional: for admin access
 python manage.py runserver
 ```
 
-#### Frontend
+#### Frontend Setup
 
 ```bash
 cd frontend
@@ -80,17 +87,24 @@ npm install
 npm start
 ```
 
+**Access:** Frontend at http://localhost:3000, Backend at http://localhost:8000
+
 ## 🏗️ Tech Stack
 
 ### Backend
-- Django 4.2
-- Django REST Framework
-- SQLite (easily switchable to PostgreSQL)
+- Django 4.2.9 + Django REST Framework 3.14
+- PostgreSQL (production) / SQLite (development)
+- Gunicorn + Whitenoise (production server)
 
 ### Frontend
-- React 18
-- Tailwind CSS
-- Axios
+- React 18.2 + Tailwind CSS 3
+- Axios for API communication
+- Modern ES6+ JavaScript
+
+### DevOps
+- Docker + Docker Compose
+- Vercel (frontend hosting)
+- Render (backend + PostgreSQL hosting)
 
 ## 📁 Project Structure
 
@@ -143,26 +157,43 @@ python manage.py test feed
 ```
 
 **Test Coverage:**
-- Leaderboard calculation (24-hour window)
-- Duplicate like prevention (race conditions)
-- Comment tree structure integrity
+- ✅ Leaderboard calculation (24-hour window with correct karma math)
+- ✅ Duplicate like prevention (race condition handling)
+- ✅ Comment tree structure integrity (materialized path validation)
+- ✅ N+1 query prevention (verifies < 10 queries for 70 nested comments)
+
+**Run specific test:**
+```bash
+python manage.py test feed.tests.LeaderboardTestCase.test_leaderboard_calculation_last_24h
+python manage.py test feed.tests.NPlusOnePreventionTestCase
+```
 
 ## � Key Technical Achievements
 
 ### 1. Efficient Comment Tree (No N+1 Queries)
 - **Challenge**: Load 50+ nested comments without 50+ database queries
 - **Solution**: Materialized path + strategic prefetching with nested `Prefetch` objects
-- **Result**: Entire comment tree loaded in minimal queries (O(1) instead of O(n))
+- **Result**: Entire comment tree loaded in ~4-6 queries instead of O(n)
+- **See:** [EXPLAINER.md - The Tree](EXPLAINER.md#1-the-tree-nested-comments-architecture)
 
 ### 2. Race Condition Prevention
 - **Challenge**: Prevent duplicate likes under concurrent requests
 - **Solution**: Database `UniqueConstraint` on (user, post) and (user, comment) + atomic transactions
 - **Result**: 100% prevention of duplicate likes even under high concurrency
+- **See:** [models.py](backend/feed/models.py#L95-L114)
 
 ### 3. Dynamic 24-Hour Leaderboard
 - **Challenge**: Calculate karma from last 24 hours without storing it in a daily field
 - **Solution**: Django ORM aggregation counting likes received on posts/comments in the last 24h
-- **Result**: Real-time calculation: `(post_likes * 5) + (comment_likes * 1)`
+- **Formula:** `karma = (post_likes × 5) + (comment_likes × 1)`
+- **See:** [EXPLAINER.md - The Math](EXPLAINER.md#2-the-math-last-24h-leaderboard)
+
+## 📖 Documentation
+
+- **[EXPLAINER.md](EXPLAINER.md)** - Technical deep dive covering:
+  - 🌲 **The Tree:** Database modeling and N+1 prevention for nested comments
+  - 🧮 **The Math:** Complete QuerySet/SQL for 24h leaderboard calculation
+  - 🤖 **The AI Audit:** Specific examples where AI code was buggy and how it was fixed
 
 ## 🌐 Deployment
 
