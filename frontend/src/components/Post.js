@@ -22,6 +22,7 @@ const Post = ({ post: initialPost, onUpdate }) => {
         like_count: isLiked ? post.like_count - 1 : post.like_count + 1,
       });
       setIsLiked(!isLiked);
+      onUpdate && onUpdate(); // Refresh leaderboard on like
     } catch (err) {
       console.error('Error liking post:', err);
     }
@@ -55,6 +56,7 @@ const Post = ({ post: initialPost, onUpdate }) => {
       // Refresh the post to get updated comment counts
       const response = await feedAPI.getPost(post.id);
       setPost(response.data);
+      onUpdate && onUpdate(); // Refresh leaderboard on comment like
     } catch (err) {
       console.error('Error liking comment:', err);
     }
@@ -67,6 +69,7 @@ const Post = ({ post: initialPost, onUpdate }) => {
       // Refresh the post to get updated comments
       const response = await feedAPI.getPost(post.id);
       setPost(response.data);
+      onUpdate && onUpdate(); // Refresh leaderboard on reply
     } catch (err) {
       console.error('Error creating reply:', err);
     }

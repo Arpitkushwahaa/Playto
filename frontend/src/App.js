@@ -6,7 +6,8 @@ import './index.css';
 function App() {
   const [refreshLeaderboard, setRefreshLeaderboard] = useState(0);
 
-  const handlePostCreated = useCallback(() => {
+  // Callback to refresh leaderboard on ANY activity (post, comment, like)
+  const handleActivityUpdate = useCallback(() => {
     setRefreshLeaderboard(prev => prev + 1);
   }, []);
 
@@ -64,12 +65,12 @@ function App() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Feed Section */}
           <div className="lg:col-span-2">
-            <Feed onPostCreated={handlePostCreated} />
+            <Feed onActivityUpdate={handleActivityUpdate} />
           </div>
 
           {/* Leaderboard Section */}
           <div className="lg:col-span-1">
-            <Leaderboard key={refreshLeaderboard} />
+            <Leaderboard key={refreshLeaderboard} onActivityUpdate={handleActivityUpdate} />
           </div>
         </div>
       </main>

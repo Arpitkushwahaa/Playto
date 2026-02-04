@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { feedAPI } from '../api';
 import Post from './Post';
 
-const Feed = ({ onPostCreated }) => {
+const Feed = ({ onActivityUpdate }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -44,7 +44,7 @@ const Feed = ({ onPostCreated }) => {
       setNewPostContent('');
       setShowCreateForm(false);
       loadPosts();
-      onPostCreated && onPostCreated();
+      onActivityUpdate && onActivityUpdate(); // Refresh leaderboard
     } catch (err) {
       console.error('Error creating post:', err);
       alert('Failed to create post.');
@@ -232,7 +232,7 @@ const Feed = ({ onPostCreated }) => {
         </div>
       ) : (
         posts.map((post) => (
-          <Post key={post.id} post={post} onUpdate={() => { loadPosts(); onPostCreated && onPostCreated(); }} />
+          <Post key={post.id} post={post} onUpdate={() => { loadPosts(); onActivityUpdate && onActivityUpdate(); }} />
         ))
       )}
     </div>

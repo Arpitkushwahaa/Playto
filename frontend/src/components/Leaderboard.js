@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { feedAPI } from '../api';
 
-const Leaderboard = () => {
+const Leaderboard = ({ onActivityUpdate }) => {
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     loadLeaderboard();
-    // Refresh leaderboard every 30 seconds
-    const interval = setInterval(loadLeaderboard, 30000);
+    // Refresh leaderboard every 10 seconds for real-time updates
+    const interval = setInterval(loadLeaderboard, 10000);
     return () => clearInterval(interval);
   }, []);
 
@@ -123,7 +123,7 @@ const Leaderboard = () => {
       
       <div className="mt-6 pt-4 border-t border-blue-300">
         <p className="text-xs text-gray-500 text-center">
-          🔄 Auto-updates every 30 seconds
+          🔄 Auto-updates every 10 seconds
         </p>
       </div>
     </div>
