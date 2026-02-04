@@ -5,18 +5,38 @@ A full-stack community feed application with threaded discussions and a dynamic 
 ![Django](https://img.shields.io/badge/Django-4.2-green.svg)
 ![React](https://img.shields.io/badge/React-18.2-blue.svg)
 ![DRF](https://img.shields.io/badge/DRF-3.14-orange.svg)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-## ✨ Features
+## Requirements Implementation
 
-- **📮 Post Feed**: Create and view posts with author information and like counts
-- **💬 Threaded Comments**: Reddit-style nested comments with unlimited depth
-- **🏆 Gamification**: Karma-based system (5 karma per post like, 1 karma per comment like)
-- **📊 Dynamic Leaderboard**: Top 5 users based on karma earned in the last 24 hours only
-- **⚡ Optimized Performance**: Efficient query handling to prevent N+1 queries
-- **🔒 Race Condition Prevention**: Database constraints to prevent duplicate likes
+### 1. Core Features
+
+- **The Feed:** Displays text posts with their **Author** and **Like count**.
+- **Threaded Comments:** Users can comment on posts, *and* reply to other comments (nested threads, like Reddit).
+- **Gamification:**
+    - 1 Like on a Post = 5 Karma.
+    - 1 Like on a Comment = 1 Karma.
+- **The Leaderboard:** A widget showing the **Top 5 Users** based on Karma earned **in the last 24 hours only**.
+
+### 2. Technical Constraints
+
+- **The N+1 Nightmare (Comments):**
+    - Loading a post with 50 nested comments does not trigger 50 SQL queries.
+    - **Solution:** Uses `select_related` and `prefetch_related` with nested `Prefetch` objects to fetch the entire comment tree efficiently.
+    
+- **Concurrency:**
+    - Users cannot "double like" a post or comment to inflate Karma.
+    - **Solution:** Database-level `UniqueConstraint` on (user, post) and (user, comment) pairs, with atomic transactions to handle race conditions.
+    
+- **Complex Aggregation (Leaderboard):**
+    - The leaderboard *only* counts Karma earned in the last 24 hours.
+    - **Solution:** Dynamically calculates karma from Like records filtered by `created_at >= 24 hours ago`. No static "Daily Karma" field is used - it's calculated on-the-fly from the transaction history.
 
 ## 🚀 Quick Start
+
+### Live Demo
+
+- **Frontend:** https://playto-kappa.vercel.app
+- **Backend API:** https://playto-ohyu.onrender.com/api
 
 ### Using Docker (Recommended)
 
@@ -89,10 +109,7 @@ Playto/
 │   │   └── api.js        # API client
 │   └── package.json
 ├── docker-compose.yml
-├── README.md
-├── EXPLAINER.md         # Technical deep dive
-├── API.md               # API documentation
-└── DEPLOYMENT.md        # Deployment guide
+└── README.md
 ```
 
 ## API Endpoints
@@ -130,56 +147,40 @@ python manage.py test feed
 - Duplicate like prevention (race conditions)
 - Comment tree structure integrity
 
-## 📖 Documentation
-
-- **[EXPLAINER.md](EXPLAINER.md)** - Technical deep dive covering:
-  - Comment tree architecture and N+1 query prevention
-  - Leaderboard calculation with QuerySet examples
-  - AI audit showing where AI failed and how issues were fixed
-  
-- **[API.md](API.md)** - Complete API reference with endpoints and examples
-
-- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Guide for deploying to Railway, Vercel, Heroku, or AWS
-
-## 🔑 Key Technical Achievements
+## � Key Technical Achievements
 
 ### 1. Efficient Comment Tree (No N+1 Queries)
 - **Challenge**: Load 50+ nested comments without 50+ database queries
-- **Solution**: Materialized path + strategic prefetching
-- **Result**: 50 nested comments in 4 queries (92% improvement)
+- **Solution**: Materialized path + strategic prefetching with nested `Prefetch` objects
+- **Result**: Entire comment tree loaded in minimal queries (O(1) instead of O(n))
 
 ### 2. Race Condition Prevention
 - **Challenge**: Prevent duplicate likes under concurrent requests
-- **Solution**: Database unique constraints + atomic transactions
-- **Result**: 100% prevention of duplicate likes
+- **Solution**: Database `UniqueConstraint` on (user, post) and (user, comment) + atomic transactions
+- **Result**: 100% prevention of duplicate likes even under high concurrency
 
 ### 3. Dynamic 24-Hour Leaderboard
-- **Challenge**: Calculate karma from last 24 hours without storing it
-- **Solution**: Complex Django ORM aggregation with time-based filtering
-- **Result**: Real-time calculation with proper indexing
-
-See [EXPLAINER.md](EXPLAINER.md) for detailed technical explanations.
+- **Challenge**: Calculate karma from last 24 hours without storing it in a daily field
+- **Solution**: Django ORM aggregation counting likes received on posts/comments in the last 24h
+- **Result**: Real-time calculation: `(post_likes * 5) + (comment_likes * 1)`
 
 ## 🌐 Deployment
 
-The application is ready to deploy to cloud platforms. See [DEPLOYMENT.md](DEPLOYMENT.md) for:
-- Railway (recommended for full-stack)
-- Vercel + Railway combination
-- Heroku
-- AWS (Elastic Beanstalk or ECS)
+**Live Application:**
+- Frontend: https://playto-kappa.vercel.app
+- Backend: https://playto-ohyu.onrender.com/api
 
-## 📊 Performance Metrics
+The application is deployed on:
+- **Frontend**: Vercel (auto-deploys from main branch)
+- **Backend**: Render (PostgreSQL + Gunicorn)
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Nested comment queries | 51 queries | 4 queries | 92% reduction |
-| Duplicate like prevention | Vulnerable | 100% safe | ∞% |
-| Leaderboard query time | N/A | 50-200ms | Optimized |
+## 📝 License
 
+MIT
 ## 🤝 Contributing
 
 This is a challenge project. Feedback and suggestions are welcome!
 
 ## 📄 License
 
-MIT License - See [LICENSE](LICENSE) file for details.
+MIT

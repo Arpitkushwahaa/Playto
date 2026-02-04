@@ -218,54 +218,37 @@ class LeaderboardViewSet(viewsets.ViewSet):
         - 1 Like on a Post = 5 Karma
         - 1 Like on a Comment = 1 Karma
         
-        This is calculated dynamically from the Like table, not stored.
+        This is calculated dynamically from the Like table based on likes received
+        in the last 24 hours, not stored in a field.
         """
         # Calculate time 24 hours ago
         twenty_four_hours_ago = timezone.now() - timedelta(hours=24)
         
         # This is the critical query for the leaderboard
-        # It aggregates likes from the last 24 hours and calculates karma
+        # It counts likes received on posts and comments in the last 24 hours
         leaderboard_data = User.objects.filter(
             Q(posts__likes__created_at__gte=twenty_four_hours_ago) |
             Q(comments__likes__created_at__gte=twenty_four_hours_ago)
         ).annotate(
-            # Count post likes in last 24h and multiply by 5
-            post_karma=Sum(
-                Case(
-                    When(
-                        posts__likes__created_at__gte=twenty_four_hours_ago,
-                        then=5
-                    ),
-                    default=0,
-                    output_field=IntegerField()
-                )
-            ),
-            # Count comment likes in last 24h and multiply by 1
-            comment_karma=Sum(
-                Case(
-                    When(
-                        comments__likes__created_at__gte=twenty_four_hours_ago,
-                        then=1
-                    ),
-                    default=0,
-                    output_field=IntegerField()
-                )
-            ),
-            # Count actual posts created in last 24h
-            post_count=Count(
-                'posts',
-                filter=Q(posts__created_at__gte=twenty_four_hours_ago),
+            # Count likes received on user's posts in last 24h (each worth 5 karma)
+            post_likes=Count(
+                'posts__likes',
+                filter=Q(posts__likes__created_at__gte=twenty_four_hours_ago),
                 distinct=True
             ),
-            # Count actual comments created in last 24h
-            comment_count=Count(
-                'comments',
-                filter=Q(comments__created_at__gte=twenty_four_hours_ago),
+            # Count likes received on user's comments in last 24h (each worth 1 karma)
+            comment_likes=Count(
+                'comments__likes',
+                filter=Q(comments__likes__created_at__gte=twenty_four_hours_ago),
                 distinct=True
-            )
+            ),
+            # Count total posts created (for display)
+            post_count=Count('posts', distinct=True),
+            # Count total comments created (for display)
+            comment_count=Count('comments', distinct=True)
         ).annotate(
-            # Total karma is sum of post_karma and comment_karma
-            karma=F('post_karma') + F('comment_karma')
+            # Calculate total karma: (post_likes * 5) + (comment_likes * 1)
+            karma=(F('post_likes') * 5) + (F('comment_likes') * 1)
         ).filter(
             karma__gt=0
         ).order_by('-karma')[:5]

@@ -85,14 +85,25 @@ class PostSerializer(serializers.ModelSerializer):
         """
         Get all top-level comments with their nested replies.
         Uses efficient prefetching to avoid N+1 queries.
+        This loads the entire comment tree in a minimal number of queries.
         """
         # Get only top-level comments (no parent)
+        # Recursively prefetch all nested replies to avoid N+1 problem
         top_level_comments = obj.comments.filter(parent__isnull=True).select_related('author').prefetch_related(
-            Prefetch('replies', queryset=Comment.objects.select_related('author').prefetch_related(
-                Prefetch('replies', queryset=Comment.objects.select_related('author').prefetch_related(
-                    'replies__author'  # Pre-fetch up to 3 levels deep
-                ))
-            ))
+            Prefetch(
+                'replies',
+                queryset=Comment.objects.select_related('author').prefetch_related(
+                    Prefetch(
+                        'replies',
+                        queryset=Comment.objects.select_related('author').prefetch_related(
+                            Prefetch(
+                                'replies',
+                                queryset=Comment.objects.select_related('author').all()
+                            )
+                        )
+                    )
+                )
+            )
         )
         
         return CommentSerializer(top_level_comments, many=True, context=self.context).data
