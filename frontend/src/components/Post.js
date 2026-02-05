@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { feedAPI } from '../api';
 import Comment from './Comment';
 
@@ -9,14 +9,34 @@ const Post = ({ post: initialPost, onUpdate }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
+  // Check if user has already liked this post
+  useEffect(() => {
+    const username = localStorage.getItem('playto_username') || 'Guest';
+    const likedPosts = JSON.parse(localStorage.getItem('playto_liked_posts') || '{}');
+    const userLikes = likedPosts[username] || [];
+    setIsLiked(userLikes.includes(post.id));
+  }, [post.id]);
+
   const handleLike = async () => {
     try {
       const username = localStorage.getItem('playto_username') || 'Guest';
+      
       if (isLiked) {
         await feedAPI.unlikePost(post.id, username);
+        // Remove from liked posts in localStorage
+        const likedPosts = JSON.parse(localStorage.getItem('playto_liked_posts') || '{}');
+        const userLikes = likedPosts[username] || [];
+        likedPosts[username] = userLikes.filter(id => id !== post.id);
+        localStorage.setItem('playto_liked_posts', JSON.stringify(likedPosts));
       } else {
         await feedAPI.likePost(post.id, username);
+        // Add to liked posts in localStorage
+        const likedPosts = JSON.parse(localStorage.getItem('playto_liked_posts') || '{}');
+        const userLikes = likedPosts[username] || [];
+        likedPosts[username] = [...userLikes, post.id];
+        localStorage.setItem('playto_liked_posts', JSON.stringify(likedPosts));
       }
+      
       // Update like count
       setPost({
         ...post,
@@ -26,7 +46,7 @@ const Post = ({ post: initialPost, onUpdate }) => {
       onUpdate && onUpdate(); // Refresh leaderboard on like
     } catch (err) {
       console.error('Error liking post:', err);
-      alert(err.response?.data?.detail || 'Failed to like post');
+      alert(err.response?.data?.detail || 'You have already liked this post');
     }
   };
 

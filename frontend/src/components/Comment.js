@@ -1,16 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Comment = ({ comment, onLike, onReply, depth = 0 }) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [replyContent, setReplyContent] = useState('');
   const [isLiked, setIsLiked] = useState(false);
 
+  // Check if user has already liked this comment
+  useEffect(() => {
+    const username = localStorage.getItem('playto_username') || 'Guest';
+    const likedComments = JSON.parse(localStorage.getItem('playto_liked_comments') || '{}');
+    const userLikes = likedComments[username] || [];
+    setIsLiked(userLikes.includes(comment.id));
+  }, [comment.id]);
+
   const handleLike = async () => {
     try {
+      const username = localStorage.getItem('playto_username') || 'Guest';
+      
+      if (isLiked) {
+        // Remove from liked comments in localStorage
+        const likedComments = JSON.parse(localStorage.getItem('playto_liked_comments') || '{}');
+        const userLikes = likedComments[username] || [];
+        likedComments[username] = userLikes.filter(id => id !== comment.id);
+        localStorage.setItem('playto_liked_comments', JSON.stringify(likedComments));
+      } else {
+        // Add to liked comments in localStorage
+        const likedComments = JSON.parse(localStorage.getItem('playto_liked_comments') || '{}');
+        const userLikes = likedComments[username] || [];
+        likedComments[username] = [...userLikes, comment.id];
+        localStorage.setItem('playto_liked_comments', JSON.stringify(likedComments));
+      }
+      
       await onLike(comment.id, !isLiked);
       setIsLiked(!isLiked);
     } catch (err) {
       console.error('Error liking comment:', err);
+      alert('You have already liked this comment');
     }
   };
 
