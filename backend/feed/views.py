@@ -268,10 +268,6 @@ class LeaderboardViewSet(viewsets.ViewSet):
                 filter=Q(comments__likes__created_at__gte=twenty_four_hours_ago),
                 distinct=True
             ),
-            # Count total posts created (for display)
-            post_count=Count('posts', distinct=True),
-            # Count total comments created (for display)
-            comment_count=Count('comments', distinct=True)
         ).annotate(
             # Calculate total karma: (post_likes * 5) + (comment_likes * 1)
             karma=(F('post_likes') * 5) + (F('comment_likes') * 1)
@@ -285,8 +281,8 @@ class LeaderboardViewSet(viewsets.ViewSet):
                 'user_id': user.id,
                 'username': user.username,
                 'karma': user.karma or 0,
-                'post_count': user.post_count or 0,
-                'comment_count': user.comment_count or 0,
+                'post_likes': user.post_likes or 0,  # Number of likes on posts
+                'comment_likes': user.comment_likes or 0,  # Number of likes on comments
             }
             for user in leaderboard_data
         ]

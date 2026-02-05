@@ -163,5 +163,5 @@ class LeaderboardSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     username = serializers.CharField()
     karma = serializers.IntegerField()
-    post_count = serializers.IntegerField()
-    comment_count = serializers.IntegerField()
+    post_likes = serializers.IntegerField()  # Likes received on posts in last 24h
+    comment_likes = serializers.IntegerField()  # Likes received on comments in last 24h
