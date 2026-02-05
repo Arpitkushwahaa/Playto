@@ -11,10 +11,11 @@ const Post = ({ post: initialPost, onUpdate }) => {
 
   const handleLike = async () => {
     try {
+      const username = localStorage.getItem('playto_username') || 'Guest';
       if (isLiked) {
-        await feedAPI.unlikePost(post.id);
+        await feedAPI.unlikePost(post.id, username);
       } else {
-        await feedAPI.likePost(post.id);
+        await feedAPI.likePost(post.id, username);
       }
       // Update like count
       setPost({
@@ -25,6 +26,7 @@ const Post = ({ post: initialPost, onUpdate }) => {
       onUpdate && onUpdate(); // Refresh leaderboard on like
     } catch (err) {
       console.error('Error liking post:', err);
+      alert(err.response?.data?.detail || 'Failed to like post');
     }
   };
 
@@ -48,10 +50,11 @@ const Post = ({ post: initialPost, onUpdate }) => {
 
   const handleCommentLike = async (commentId, like) => {
     try {
+      const username = localStorage.getItem('playto_username') || 'Guest';
       if (like) {
-        await feedAPI.likeComment(commentId);
+        await feedAPI.likeComment(commentId, username);
       } else {
-        await feedAPI.unlikeComment(commentId);
+        await feedAPI.unlikeComment(commentId, username);
       }
       // Refresh the post to get updated comment counts
       const response = await feedAPI.getPost(post.id);

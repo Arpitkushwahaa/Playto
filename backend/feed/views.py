@@ -47,12 +47,19 @@ class PostViewSet(viewsets.ModelViewSet):
         Like a post. Handles race conditions with database constraints.
         """
         post = self.get_object()
+        username = request.data.get('username', 'Guest')
         
         try:
+            # Get or create user
+            user, _ = User.objects.get_or_create(
+                username=username,
+                defaults={'email': f'{username}@example.com'}
+            )
+            
             # Use atomic transaction to ensure consistency
             with transaction.atomic():
                 like, created = Like.objects.get_or_create(
-                    user=User.objects.get_or_create(username="demo_user", defaults={"email": "demo@example.com"})[0],
+                    user=user,
                     post=post
                 )
                 
@@ -86,10 +93,16 @@ class PostViewSet(viewsets.ModelViewSet):
         Unlike a post.
         """
         post = self.get_object()
+        username = request.data.get('username', 'Guest')
         
         try:
+            user, _ = User.objects.get_or_create(
+                username=username,
+                defaults={'email': f'{username}@example.com'}
+            )
+            
             with transaction.atomic():
-                like = Like.objects.get(user=User.objects.get_or_create(username="demo_user", defaults={"email": "demo@example.com"})[0], post=post)
+                like = Like.objects.get(user=user, post=post)
                 like.delete()
                 
                 # Refresh post to get updated like_count
@@ -142,11 +155,18 @@ class CommentViewSet(viewsets.ModelViewSet):
         Like a comment. Handles race conditions with database constraints.
         """
         comment = self.get_object()
+        username = request.data.get('username', 'Guest')
         
         try:
+            # Get or create user
+            user, _ = User.objects.get_or_create(
+                username=username,
+                defaults={'email': f'{username}@example.com'}
+            )
+            
             with transaction.atomic():
                 like, created = Like.objects.get_or_create(
-                    user=User.objects.get_or_create(username="demo_user", defaults={"email": "demo@example.com"})[0],
+                    user=user,
                     comment=comment
                 )
                 
@@ -179,10 +199,16 @@ class CommentViewSet(viewsets.ModelViewSet):
         Unlike a comment.
         """
         comment = self.get_object()
+        username = request.data.get('username', 'Guest')
         
         try:
+            user, _ = User.objects.get_or_create(
+                username=username,
+                defaults={'email': f'{username}@example.com'}
+            )
+            
             with transaction.atomic():
-                like = Like.objects.get(user=User.objects.get_or_create(username="demo_user", defaults={"email": "demo@example.com"})[0], comment=comment)
+                like = Like.objects.get(user=user, comment=comment)
                 like.delete()
                 
                 # Refresh comment to get updated like_count
